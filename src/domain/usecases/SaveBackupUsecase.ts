@@ -3,7 +3,7 @@
 import { s3_client } from "../config/S3Cliente";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { readFile } from "fs/promises";
-
+import { v4 } from "uuid";
 
 
 export class SaveFileBackup {
@@ -20,14 +20,18 @@ export class SaveFileBackup {
         
         try {
           const fileBuffer = await readFile(path); 
-          const key = path.split('\\')[8];
+          const keys = path.split('\\');
+          const name = keys[keys.length-1];
+          const key=v4();
+
       
           const command = new PutObjectCommand({
             Bucket: process.env.S3_BUCKET,
-            Key: key,
+            Key: key+'-'+name,
             Body: fileBuffer, 
             ContentType: contentType,
           });
+
       
           await s3_client.send(command);
       
