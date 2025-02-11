@@ -14,7 +14,14 @@ export class PostgresStrategy implements IBackup{
 
     }
 
+    private validateInputs(dbname: string, serverName: string) {
+        if (!dbname) throw new Error('Db Name is missing');
+        if (!serverName) throw new Error('ServerName is missing');
+    }
+
+
     async generateBackup(user: string, password: string, dbname: string,serverName:string): Promise<string> {
+        this.validateInputs(dbname,serverName);
       try {
           const backupPath = join(process.cwd(), 'backups', `${dbname}_postgres_${Date.now()}.backup`);
           const env = {
@@ -33,8 +40,8 @@ export class PostgresStrategy implements IBackup{
               console.error('Error durante el backup:', stderr);
               throw new Error(stderr);
           }
-          console.log(`Backup Successfully: ${backupPath}`);
           SaveFileBackup.upload(backupPath);
+          console.log("Backup Postgres ok");
           return `Backup completado exitosamente en: ${backupPath}`;
       } catch (error) {
           console.error('Error en generateBackup:', error);
