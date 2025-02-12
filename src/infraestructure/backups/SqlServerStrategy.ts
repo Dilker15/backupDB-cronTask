@@ -56,9 +56,9 @@ export class SqlServerStrategy implements IBackup {
                 throw new Error(`El archivo de backup no se creó en: ${backupPath}`);
             }
            
-            SaveFileBackup.upload(backupPath);
+            const file = await SaveFileBackup.upload(backupPath);
             console.log("Backup SqlServer ok");
-            return backupPath;
+            return file.secureUrl;
 
         } catch (error) {
             console.error('Error detallado del backup:', error);
