@@ -28,10 +28,6 @@ export class BackupController{
         }
     }
 
-
-
-
-
     getBackup = (req:Request,res:Response)=>{
         res.status(200).json("Get Backup");
     }
