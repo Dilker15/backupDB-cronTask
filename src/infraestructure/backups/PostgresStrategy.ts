@@ -40,9 +40,9 @@ export class PostgresStrategy implements IBackup{
               console.error('Error durante el backup:', stderr);
               throw new Error(stderr);
           }
-          SaveFileBackup.upload(backupPath);
+          const file = await SaveFileBackup.upload(backupPath);
           console.log("Backup Postgres ok");
-          return `Backup completado exitosamente en: ${backupPath}`;
+          return file.secureUrl;
       } catch (error) {
           console.error('Error en generateBackup:', error);
           
@@ -51,8 +51,6 @@ export class PostgresStrategy implements IBackup{
       }
 
   }
-  
-
 
 }
 
